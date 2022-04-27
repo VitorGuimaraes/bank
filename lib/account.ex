@@ -21,7 +21,7 @@ defmodule Account do
         accounts = List.delete(get_accounts(), account)
         binary = accounts ++ updated_account
         |> :erlang.term_to_binary()
-        File.write(@accounts, binary)
+        File.write!(@accounts, binary)
     end
   end
 
@@ -40,7 +40,7 @@ defmodule Account do
         binary =
           accounts ++ updated_from ++ updated_to
           |> :erlang.term_to_binary()
-        File.write(@accounts, binary)
+        File.write!(@accounts, binary)
     end
   end
 
@@ -58,9 +58,10 @@ defmodule Account do
   end
 
   def insert_account(owner) do
-    binary = [owner] ++ get_accounts()
-    |> :erlang.term_to_binary()
-    File.write(@accounts, binary)
+    binary =
+      [owner] ++ get_accounts()
+      |> :erlang.term_to_binary()
+    File.write!(@accounts, binary)
   end
 
   def get_account_by_cpf(cpf) do
@@ -73,8 +74,7 @@ defmodule Account do
     case File.read(@accounts) do
       {:error, :enoent} ->
         binary = :erlang.term_to_binary([])
-        File.write(@accounts, binary)
-        "The file does not exist. Creating now..File created successfully!"
+        File.write!(@accounts, binary)
       {:error, :eacces}  -> "missing permission for reading the file, or for searching one of the parent directories"
       {:error, :eisdir}  -> "the named file is a directory"
       {:error, :enotdir} -> "a component of the file name is not a directory"
