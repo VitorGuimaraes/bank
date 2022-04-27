@@ -75,11 +75,11 @@ defmodule Account do
       {:error, :enoent} ->
         binary = :erlang.term_to_binary([])
         File.write!(@accounts, binary)
-      {:error, :eacces}  -> "missing permission for reading the file, or for searching one of the parent directories"
-      {:error, :eisdir}  -> "the named file is a directory"
-      {:error, :enotdir} -> "a component of the file name is not a directory"
-      {:error, :enomem}  -> "there is not enough memory for the contents of the file"
-      {:ok, _}           -> "the file is ready"
+      {:error, :eacces}  -> {:error, "missing permission for reading the file, or for searching one of the parent directories"}
+      {:error, :eisdir}  -> {:error, "the named file is a directory"}
+      {:error, :enotdir} -> {:error,"a component of the file name is not a directory"}
+      {:error, :enomem}  -> {:error,"there is not enough memory for the contents of the file"}
+      {:ok, _}           -> {:ok, "the file is ready"}
     end
   end
 
