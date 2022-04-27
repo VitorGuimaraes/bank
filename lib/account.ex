@@ -32,11 +32,14 @@ defmodule Account do
         updated_from = [%Account{from | balance: from.balance - value}]
         updated_to =   [%Account{to | balance: to.balance + value}]
 
-        accounts = get_accounts()
-        accounts = List.delete(accounts, from)
-        accounts = List.delete(accounts, to)
-        binary = accounts ++ updated_from ++ updated_to
-        |> :erlang.term_to_binary()
+        accounts =
+          get_accounts()
+          |> List.delete(from)
+          |> List.delete(to)
+
+        binary =
+          accounts ++ updated_from ++ updated_to
+          |> :erlang.term_to_binary()
         File.write(@accounts, binary)
     end
   end
@@ -50,7 +53,8 @@ defmodule Account do
   def get_accounts() do
     check_file_integrity()
     {:ok, binary} = File.read(@accounts)
-    :erlang.binary_to_term(binary)
+    binary
+    |> :erlang.binary_to_term()
   end
 
   def insert_account(owner) do
